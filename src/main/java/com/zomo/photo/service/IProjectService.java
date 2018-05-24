@@ -12,21 +12,23 @@ public interface IProjectService {
 
     ServiceResponse findById(Integer projectId,UserVo userVo);
 
-    ServiceResponse findByName(String name,UserVo userVo);
+//    ServiceResponse findByName(String name,UserVo userVo);
 
     ServiceResponse addProject(Project project,UserVo userVo,Integer[] userIds);
 
-    ServiceResponse deleteById(Integer id,User user);
+    ServiceResponse deleteById(Integer projectId,UserVo userVo);
 
-    ServiceResponse updateProject(Project project,User user);
+    ServiceResponse updateProject(Project project,UserVo userVo);
 
-    ServiceResponse findAllDetailByProjectId(Integer projectId);
+    ServiceResponse findAllDetailByProjectId(Integer projectId,UserVo userVo);
 
-    ServiceResponse findDetailByDetailId(Integer detailId);
+    ServiceResponse findDetailByDetailId(Integer detailId,UserVo userVo);
 
-    ServiceResponse addDetail(ProjectDetail projectDetail,Integer projectId);
+    ServiceResponse addDetail(ProjectDetail projectDetail,Integer projectId,UserVo userVo);
 
-    ServiceResponse deleteDetail(Integer DetailId);
+    ServiceResponse deleteDetail(Integer DetailId,UserVo userVo);
 
     ServiceResponse addPrivileges(Integer projectId,Integer[] userIds);
+
+    ServiceResponse checkPrivilege(Integer projectId,UserVo userVo);
 }
