@@ -26,9 +26,10 @@ public interface IProjectService {
 
     ServiceResponse addDetail(ProjectDetail projectDetail,Integer projectId,UserVo userVo);
 
-    ServiceResponse deleteDetail(Integer DetailId,UserVo userVo);
+    ServiceResponse deleteDetail(Integer DetailId,Integer projectId,UserVo userVo);
 
     ServiceResponse addPrivileges(Integer projectId,Integer[] userIds);
 
     ServiceResponse checkPrivilege(Integer projectId,UserVo userVo);
+
 }

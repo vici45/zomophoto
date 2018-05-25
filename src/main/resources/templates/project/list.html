@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html;charset=UTF-8"/>
+</head>
+<body>
+<table>
+    <tr>
+        <th>projectName</th>
+        <th>projectSit</th>
+        <th>projectTime</th>
+        <th>projectBannerHost</th>
+        <th>projectKeyImageHost</th>
+        <th>projectContent</th>
+        <th>projectCreateTime</th>
+        <th>projectUpdateTime</th>
+        <th>projectDetail</th>
+    </tr>
+    <tr th:each="list,listStatus:${list}">
+        <td th:text="${list.projectName}"></td>
+        <td th:text="${list.projectSit}"></td>
+        <td th:text="${list.projectTime}"></td>
+        <td th:text="${list.projectBannerHost}"></td>
+        <td th:text="${list.projectKeyImageHost}"></td>
+        <td th:text="${list.projectContent}"></td>
+        <td th:text="${list.projectCreateTime}"></td>
+        <td th:text="${list.projectUpdateTime}"></td>
+        <td><a th:href="@{/project/findDetailByProjectId(projectId=${list.id})}">projectDetail</a></td>
+    </tr>
+
+</table>
+</body>
+</html>

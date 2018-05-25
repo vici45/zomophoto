@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html;charset=UTF-8"/>
+</head>
+<body>
+<table>
+    <tr>
+        <th>projectId</th>
+        <th>imageHost</th>
+
+    </tr>
+    <tr th:each="list,listStatus:${list.projectDetailVoList}">
+        <td th:text="${list.projectId}"></td>
+        <td th:text="${list.imageHost}"></td>
+        <img th:src="@{${list.imageHost}}" th:width="200px" th:high="200px"/>
+    </tr>
+
+</table>
+</body>
+</html>

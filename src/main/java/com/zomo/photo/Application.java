@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 @SpringBootApplication
 public class Application {
 
@@ -14,8 +14,8 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @RequestMapping("hello")
+    @RequestMapping("/hello")
     public String hello(){
-        return "hello";
+        return "user/login";
     }
 }

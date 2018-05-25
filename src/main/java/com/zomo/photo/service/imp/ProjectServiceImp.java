@@ -9,7 +9,6 @@ import com.zomo.photo.common.ServiceResponse;
 import com.zomo.photo.entity.Project;
 import com.zomo.photo.entity.ProjectDetail;
 import com.zomo.photo.entity.ProjectPrivilege;
-import com.zomo.photo.entity.User;
 import com.zomo.photo.repository.ProjectDetailRepository;
 import com.zomo.photo.repository.ProjectPrivilegeRepository;
 import com.zomo.photo.repository.ProjectRepository;
@@ -130,14 +129,23 @@ public class ProjectServiceImp implements IProjectService {
 
     @Override
     public ServiceResponse addDetail(ProjectDetail projectDetail, Integer projectId,UserVo userVo) {
-        checkPrivilege(projectId,userVo);
+        ServiceResponse response=checkPrivilege(projectId,userVo);
+        if (!response.isSuccess()){
+            return response;
+        }
+        projectDetailRepository.save(projectDetail);
 
-        return null;
+        return ServiceResponse.createBySuccess();
     }
 
     @Override
-    public ServiceResponse deleteDetail(Integer DetailId,UserVo userVo) {
-        return null;
+    public ServiceResponse deleteDetail(Integer DetailId,Integer projectId,UserVo userVo) {
+        ServiceResponse response=checkPrivilege(projectId,userVo);
+        if (!response.isSuccess()){
+            return response;
+        }
+        projectRepository.delete(DetailId);
+        return ServiceResponse.createBySuccess();
     }
 
     @Override
