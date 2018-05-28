@@ -1,19 +1,27 @@
 package com.zomo.photo.controller;
 
+import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.qiniu.common.QiniuException;
+import com.qiniu.http.Response;
 import com.zomo.photo.VO.UserVo;
 import com.zomo.photo.common.Const;
 import com.zomo.photo.common.ServiceResponse;
+import com.zomo.photo.dto.QiNiuPutRet;
 import com.zomo.photo.entity.Project;
+import com.zomo.photo.service.IFileService;
 import com.zomo.photo.service.IProjectService;
+import com.zomo.photo.service.IQiNiuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+
 
 @Controller
 @RequestMapping("/project/")
@@ -21,6 +29,12 @@ public class ProjectController {
 
     @Autowired
     private IProjectService projectService;
+    @Autowired
+    private IFileService fileService;
+    @Autowired
+    private IQiNiuService qiNiuService;
+    @Autowired
+    private Gson gson;
 
     @RequestMapping(value = "add_project.do",method = RequestMethod.POST)
     public ServiceResponse addProject(Project project, Integer[] userIds, HttpSession session){
@@ -81,10 +95,30 @@ public class ProjectController {
         model.addAttribute("list",response.getData());
         return "admin/admin-table";
     }
-
-    public ServiceResponse upload(MultipartFile file, HttpServletRequest request){
-        String path=request.getServletContext().getRealPath("upload");
-        return null;
+    @RequestMapping("upload")
+    @ResponseBody
+    public ServiceResponse upload(@RequestParam(value = "upload_file",required = false) MultipartFile file,
+                                  @RequestParam(value = "projectId") Integer projectId){
+        if (file.isEmpty()){
+            return ServiceResponse.createByErrorMessage("file is empty");
+        }
+        String fileName=file.getOriginalFilename();
+        try {
+            InputStream inputStream=file.getInputStream();
+            Response response=qiNiuService.fileUpload(inputStream);
+            if (response.isOK()){
+                QiNiuPutRet ret=gson.fromJson(response.bodyString(),QiNiuPutRet.class);
+                return ServiceResponse.createBySuccess(ret);
+            }else {
+                return ServiceResponse.createByerrorCodeMessage(response.statusCode,response.getInfo());
+            }
+        }catch (QiniuException e) {
+                Response response=e.response;
+                return  ServiceResponse.createByerrorCodeMessage(response.statusCode,response.getInfo());
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ServiceResponse.createByErrorMessage("ioException");
+        }
     }
 
 }
